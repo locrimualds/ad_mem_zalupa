@@ -31,8 +31,47 @@ const handleDeleteError = (error: any) => {
 
 const restProvider = simpleRestProvider(apiUrl, httpClient);
 
+const mapIdIfCards = (resource: string, record: any) =>
+  resource === "cards" ? { ...record, id: record.cardNum } : record;
+
 const dataProvider = {
   ...restProvider,
+
+  getList: async (resource: any, params: any) => {
+    const result = await restProvider.getList(resource, params);
+
+    return {
+      ...result,
+      data: result.data.map((r: any) => mapIdIfCards(resource, r)),
+    };
+  },
+
+  getOne: async (resource: any, params: any) => {
+    const result = await restProvider.getOne(resource, params);
+
+    return {
+      ...result,
+      data: mapIdIfCards(resource, result.data),
+    };
+  },
+
+  getMany: async (resource: any, params: any) => {
+    const result = await restProvider.getMany(resource, params);
+
+    return {
+      ...result,
+      data: result.data.map((r: any) => mapIdIfCards(resource, r)),
+    };
+  },
+
+  update: async (resource: any, params: any) => {
+    const result = await restProvider.update(resource, params);
+
+    return {
+      ...result,
+      data: mapIdIfCards(resource, result.data),
+    };
+  },
 
   delete: async (resource: any, params: any) => {
     try {
