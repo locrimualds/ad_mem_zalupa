@@ -8,6 +8,7 @@ import {
 import JsonEditorInput from "../components/JsonEditorInput.tsx";
 import { Divider } from "@mui/material";
 import CustomArrayInput from "../components/CustomIterator.tsx";
+import FixedToolbar from "../components/FixedToolbar.tsx";
 
 const CardForm = () => (
   <SimpleForm
@@ -24,6 +25,8 @@ const CardForm = () => (
       active: false,
       users: [],
     }}
+    toolbar={<FixedToolbar />}
+    sx={{ pb: 10 }}
   >
     <NumberInput source="cardNum" label="Номер карты" validate={[required()]} />
     <BooleanInput

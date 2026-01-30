@@ -7,6 +7,7 @@ import {
 } from "react-admin";
 import { Divider } from "@mui/material";
 import CustomArrayInput from "../components/CustomIterator.tsx";
+import FixedToolbar from "../components/FixedToolbar.tsx";
 
 const UserForm = () => (
   <SimpleForm
@@ -16,6 +17,8 @@ const UserForm = () => (
       role: "user",
       cards: [],
     }}
+    toolbar={<FixedToolbar />}
+    sx={{ pb: 10 }}
   >
     <NumberInput source="id" label="ID" validate={[required()]} />
     <TextInput source="name" label="Имя" />
