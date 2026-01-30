@@ -4,14 +4,10 @@ import {
   NumberInput,
   required,
   BooleanInput,
-  ArrayInput,
-  SimpleFormIterator,
-  FormDataConsumer,
-  ReferenceInput,
-  AutocompleteInput,
 } from "react-admin";
 import JsonEditorInput from "../components/JsonEditorInput.tsx";
 import { Divider } from "@mui/material";
+import CustomArrayInput from "../components/CustomIterator.tsx";
 
 const CardForm = () => (
   <SimpleForm
@@ -30,19 +26,6 @@ const CardForm = () => (
     }}
   >
     <NumberInput source="cardNum" label="Номер карты" validate={[required()]} />
-    <NumberInput source="cardBalance" label="Баланс" />
-    <TextInput source="cardExp" label="EXP" />
-    <TextInput source="cardCvv" label="CVV" />
-    <TextInput source="fullName" label="ФИО" />
-    <TextInput source="address" label="Адрес" />
-    <TextInput source="email" label="Email" />
-    <NumberInput source="phone" label="Телефон" validate={[required()]} />
-    <TextInput
-      source="phoneExp"
-      label="Срок действия телефона"
-      validate={[required()]}
-    />
-    <JsonEditorInput source="data" />
     <BooleanInput
       source={"status"}
       label={"Статус"}
@@ -57,42 +40,27 @@ const CardForm = () => (
       }
     />
     <Divider sx={{ my: 2, width: "100%" }} />
-    <ArrayInput source="users" label="Пользователи">
-      <SimpleFormIterator>
-        <FormDataConsumer>
-          {({ formData, scopedFormData }) => {
-            interface User {
-              id: number;
-              name: string;
-            }
-
-            const currentIndex = (formData?.users || []).indexOf(
-              scopedFormData,
-            );
-
-            const usedUserIds = (formData?.users || [])
-              .filter((_entry: never, i: number) => i !== currentIndex)
-              .map((entry: User) => entry.id)
-              .filter(Boolean);
-
-            return (
-              <ReferenceInput
-                source="id"
-                key={usedUserIds.join(",")}
-                reference="users"
-                filter={{ id: { notIn: usedUserIds } }}
-              >
-                <AutocompleteInput
-                  optionText={(record) => `${record.id} - ${record.name}`}
-                  label="Пользователь"
-                  validate={[required()]}
-                />
-              </ReferenceInput>
-            );
-          }}
-        </FormDataConsumer>
-      </SimpleFormIterator>
-    </ArrayInput>
+    <CustomArrayInput
+      source="users"
+      label="Пользователи"
+      reference="users"
+      referenceSource="id"
+      optionText={(record) => `${record.id} - ${record.name}`}
+    />
+    <Divider sx={{ my: 2, width: "100%" }} />
+    <NumberInput source="cardBalance" label="Баланс" />
+    <TextInput source="cardExp" label="EXP" />
+    <TextInput source="cardCvv" label="CVV" />
+    <TextInput source="fullName" label="ФИО" />
+    <TextInput source="address" label="Адрес" />
+    <TextInput source="email" label="Email" />
+    <NumberInput source="phone" label="Телефон" validate={[required()]} />
+    <TextInput
+      source="phoneExp"
+      label="Срок действия телефона"
+      validate={[required()]}
+    />
+    <JsonEditorInput source="data" />
   </SimpleForm>
 );
 
