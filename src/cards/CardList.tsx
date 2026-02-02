@@ -15,6 +15,8 @@ import {
   cardNumFormat,
   getFormatedDate,
 } from "../utils/main.ts";
+import StatusSwitch from "../components/cards/StatusSwitch.tsx";
+import ActiveSwitch from "../components/cards/ActiveSwitch.tsx";
 
 const filters = [
   <SearchInput source="q" placeholder="Поиск..." key="q" alwaysOn />,
@@ -80,6 +82,14 @@ const CardList = () => {
               </>
             );
           }}
+        />
+        <FunctionField
+          label="Статус"
+          render={(record) => <StatusSwitch record={record} />}
+        />
+        <FunctionField
+          label="Активно"
+          render={(record) => <ActiveSwitch record={record} />}
         />
         <EditButton />
         <DeleteButton />
