@@ -91,23 +91,16 @@ const dataProvider = {
     }
   },
 
-  updateStatus: async (resource: string, id: number, status: boolean) => {
-    const url = `${apiUrl}/${resource}/${id}/status`;
+  updateField: async (
+    resource: string,
+    id: number,
+    field: string,
+    value: boolean,
+  ) => {
+    const url = `${apiUrl}/${resource}/${id}/${field}`;
     const result = await httpClient(url, {
       method: "PATCH",
-      body: JSON.stringify({ status }),
-    });
-
-    return {
-      data: mapIdIfCards(resource, result.json),
-    };
-  },
-
-  updateActive: async (resource: string, id: number, active: boolean) => {
-    const url = `${apiUrl}/${resource}/${id}/active`;
-    const result = await httpClient(url, {
-      method: "PATCH",
-      body: JSON.stringify({ active }),
+      body: JSON.stringify({ [field]: value }),
     });
 
     return {

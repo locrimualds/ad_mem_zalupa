@@ -2,7 +2,7 @@ import React from "react";
 import { Switch } from "@mui/material";
 import { useDataProvider, useNotify, useRefresh } from "react-admin";
 
-const ActiveSwitch = ({ record }: { record?: any }) => {
+const FieldSwitch = ({ record, field }: { record?: any, field: string }) => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const refresh = useRefresh();
@@ -13,22 +13,27 @@ const ActiveSwitch = ({ record }: { record?: any }) => {
     event.stopPropagation();
 
     try {
-      await dataProvider.updateActive("cards", record.id, event.target.checked);
+      await dataProvider.updateField(
+        "cards",
+        record.id,
+        field,
+        event.target.checked,
+      );
 
-      notify("Поле Активно обновлён", { type: "success" });
+      notify("Поле обновлёно", { type: "success" });
       refresh();
     } catch (_e) {
-      notify("Ошибка при обновлении поля Активно", { type: "error" });
+      notify("Ошибка при обновлении поля", { type: "error" });
     }
   };
 
   return (
     <Switch
-      checked={Boolean(record.active)}
+      checked={Boolean(record[field])}
       onChange={handleChange}
       onClick={(e) => e.stopPropagation()}
     />
   );
 };
 
-export default ActiveSwitch;
+export default FieldSwitch;
