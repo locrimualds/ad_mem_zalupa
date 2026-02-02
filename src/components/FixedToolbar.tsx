@@ -9,13 +9,25 @@ const FixedToolbar = () => {
     const card = document.querySelector(".RaEdit-card, .RaCreate-card");
     if (!card) return;
 
+    const THRESHOLD = 15;
+
     const update = () => {
       const rect = card.getBoundingClientRect();
-      const fitsViewport = rect.height <= window.innerHeight;
+      const viewport = window.innerHeight;
 
-      setMode(fitsViewport ? "sticky" : "fixed");
+      setMode((prevMode) => {
+        if (prevMode === "sticky" && rect.height > viewport + THRESHOLD) {
+          return "fixed";
+        }
 
-      if (!fitsViewport) {
+        if (prevMode === "fixed" && rect.height < viewport - THRESHOLD) {
+          return "sticky";
+        }
+
+        return prevMode;
+      });
+
+      if (rect.height > viewport) {
         setFixedStyle({
           width: rect.width,
           left: rect.left,
@@ -25,7 +37,7 @@ const FixedToolbar = () => {
       }
     };
 
-    update(); // первый расчёт
+    update();
 
     const observer = new ResizeObserver(update);
     observer.observe(card);
